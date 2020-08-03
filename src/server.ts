@@ -65,6 +65,8 @@ export async function makeServer(opts: Options): Promise<express.Application> {
 
   if (opts.autoDiscover) {
     await collector.discoverAll();
+    // Run autodiscovery every 10 minutes
+    setInterval(() => collector.discoverAll(), 1000 * 60 * 10);
   }
 
   collector.collectJobCompletions();
