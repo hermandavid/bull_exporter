@@ -12,8 +12,11 @@ RUN node_modules/.bin/tsc -p .
 RUN yarn install --pure-lockfile --production
 
 FROM node:10-alpine
-RUN apk --no-cache add tini bash
+RUN apk --no-cache add tini bash curl
 ENTRYPOINT ["/sbin/tini", "--"]
+
+HEALTHCHECK --interval=10s --timeout=1s \
+  CMD curl -f http://localhost:9538/healthz || exit 1
 
 RUN mkdir -p /src
 RUN chown -R nobody:nogroup /src
